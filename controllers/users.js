@@ -1,0 +1,85 @@
+const { NODE_ENV, JWT_SECRET } = process.env;
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const User = require('../models/user');
+require('dotenv').config();
+
+const ValidationError = require('../errors/ValidationError');
+const errorMessages = require('../errors/errorMessages');
+const ConflictError = require('../errors/ConflictError');
+const NotFoundError = require('../errors/NotFoundError');
+const UnauthorizedError = require('../errors/UnauthorizedError');
+
+module.exports.createUser = (req, res, next) => {
+  const {
+    email,
+    password,
+    name,
+  } = req.body;
+
+  if (!email || !password) {
+    throw new ValidationError(errorMessages.BadEmailOrPassword);
+  }
+  bcrypt.hash(password, 10)
+    .then((hash) => User.create({ email, password: hash, name }))
+    .then(() => res.send({ message: `Пользователь ${email} успешно создан` }))
+    .catch((err) => {
+      if (err.code === 11000) {
+        next(new ConflictError(errorMessages.DuplicateEmail));
+      }
+      if (err.name === 'ValidationError' || err.name === 'CastError') {
+        next(new ValidationError(errorMessages.BadRequestUser));
+      } else {
+        next(err);
+      }
+    });
+};
+
+module.exports.getUsers = (req, res, next) => {
+  User.findById(req.params._id)
+    .then((user) => {
+      res.send({ email: user.email, name: user.name });
+    })
+    .catch(next);
+};
+
+module.exports.updateUser = (req, res, next) => {
+  const { name, email } = req.body;
+  User.findByIdAndUpdate(
+    req.user._id,
+    { name, email },
+    { new: true, runValidators: true },
+  )
+    .then((user) => {
+      if (user) {
+        return res.send({ email: user.email, name: user.name });
+      }
+      throw new NotFoundError(errorMessages.NotFoundUser);
+    })
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        next(new ValidationError(errorMessages.BadRequestUser));
+      } if (err.code === 11000) {
+        next(new ConflictError(errorMessages.DuplicateEmail));
+      }
+    });
+};
+
+module.exports.login = (req, res, next) => {
+  const { email, password } = req.body;
+  return User.findUserByCredentials(email, password)
+    .then((user) => {
+      if (!email || !password) {
+        next(new UnauthorizedError(errorMessages.UnauthorizedError));
+      }
+      const token = jwt.sign(
+        { _id: user._id },
+        NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret',
+        { expiresIn: '7d' },
+      );
+      return res.send({ token });
+    })
+    .catch(() => {
+      next(new UnauthorizedError(errorMessages.UnauthorizedError));
+    });
+};
