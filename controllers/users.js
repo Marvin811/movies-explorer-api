@@ -17,9 +17,6 @@ module.exports.createUser = (req, res, next) => {
     name,
   } = req.body;
 
-  if (!email || !password) {
-    throw new ValidationError(errorMessages.BadEmailOrPassword);
-  }
   bcrypt.hash(password, 10)
     .then((hash) => User.create({ email, password: hash, name }))
     .then(() => res.send({ message: `Пользователь ${email} успешно создан` }))
@@ -35,7 +32,7 @@ module.exports.createUser = (req, res, next) => {
     });
 };
 
-module.exports.getUsers = (req, res, next) => {
+module.exports.getUser = (req, res, next) => {
   User.findById(req.params._id)
     .then((user) => {
       res.send({ email: user.email, name: user.name });

@@ -7,6 +7,7 @@ const errorMessages = {
   NotFoundUser: 'Ошибка: Пользователь не найден',
   UnauthorizedError: 'Ошибка авторизации',
   BadRequestError: 'Ошибка: Переданы некорректные данные при добавлении фильма',
+  ForbiddenError: 'Ошибка: У вас нет прав на удаление данного фильма',
 };
 
 module.exports = errorMessages;
