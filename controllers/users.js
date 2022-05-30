@@ -13,11 +13,10 @@ const UnauthorizedError = require('../errors/UnauthorizedError');
 module.exports.createUser = (req, res, next) => {
   const {
     email,
-    password,
     name,
   } = req.body;
 
-  bcrypt.hash(password, 10)
+  bcrypt.hash(req.body.password, 10)
     .then((hash) => User.create({ email, password: hash, name }))
     .then(() => res.send({ message: `Пользователь ${email} успешно создан` }))
     .catch((err) => {
@@ -33,10 +32,8 @@ module.exports.createUser = (req, res, next) => {
 };
 
 module.exports.getUser = (req, res, next) => {
-  User.findById(req.params._id)
-    .then((user) => {
-      res.send({ email: user.email, name: user.name });
-    })
+  User.findById(req.user._id)
+    .then((user) => res.send(user))
     .catch(next);
 };
 

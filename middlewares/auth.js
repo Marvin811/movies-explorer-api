@@ -2,6 +2,7 @@ require('dotenv').config();
 
 const jwt = require('jsonwebtoken');
 const UnauthorizedError = require('../errors/UnauthorizedError');
+const errorMessages = require('../errors/errorMessages');
 
 const { NODE_ENV, JWT_SECRET } = process.env;
 
@@ -11,7 +12,7 @@ module.exports = (req, res, next) => {
   const { authorization } = req.headers;
 
   if (!authorization || !authorization.startsWith('Bearer')) {
-    return next(new UnauthorizedError('Необходима авторизация'));
+    return next(new UnauthorizedError(errorMessages.AuthorizationError));
   }
 
   const token = extractBearerHeader(authorization);
@@ -20,7 +21,7 @@ module.exports = (req, res, next) => {
   try {
     payload = jwt.verify(token, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret');
   } catch (e) {
-    next(new UnauthorizedError('Некорректный токен'));
+    next(new UnauthorizedError(errorMessages.AuthorizationError));
   }
 
   req.user = payload;

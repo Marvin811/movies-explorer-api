@@ -8,6 +8,8 @@ const errorMessages = {
   UnauthorizedError: 'Ошибка авторизации',
   BadRequestError: 'Ошибка: Переданы некорректные данные при добавлении фильма',
   ForbiddenError: 'Ошибка: У вас нет прав на удаление данного фильма',
+  NotFoundPage: 'Ресурс не найден',
+  AuthorizationError: 'Необходимо авторизоваться',
 };
 
 module.exports = errorMessages;
