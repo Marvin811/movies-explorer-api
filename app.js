@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
@@ -6,6 +7,7 @@ const { handleError } = require('./errors/handleError');
 const router = require('./routes/index');
 const limiter = require('./utils/limit');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
+const config = require('./utils/config');
 
 const allowedCors = [
   'localhost:3000',
@@ -15,10 +17,13 @@ const allowedCors = [
 ];
 
 // Слушаем 3000 порт
+const { dbSrc, NODE_ENV } = process.env;
 const { PORT = 3000 } = process.env;
 
 const app = express();
-mongoose.connect('mongodb://localhost:27017/movies');
+mongoose.connect(NODE_ENV === 'production' ? dbSrc : config.mongodb, {
+  useNewUrlParser: true,
+});
 
 app.use((req, res, next) => {
   const { origin } = req.headers;

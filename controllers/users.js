@@ -22,8 +22,7 @@ module.exports.createUser = (req, res, next) => {
     .catch((err) => {
       if (err.code === 11000) {
         next(new ConflictError(errorMessages.DuplicateEmail));
-      }
-      if (err.name === 'ValidationError' || err.name === 'CastError') {
+      } else if (err.name === 'ValidationError' || err.name === 'CastError') {
         next(new ValidationError(errorMessages.BadRequestUser));
       } else {
         next(err);
@@ -53,7 +52,7 @@ module.exports.updateUser = (req, res, next) => {
     .catch((err) => {
       if (err.name === 'ValidationError') {
         next(new ValidationError(errorMessages.BadRequestUser));
-      } if (err.code === 11000) {
+      } else if (err.code === 11000) {
         next(new ConflictError(errorMessages.DuplicateEmail));
       }
     });

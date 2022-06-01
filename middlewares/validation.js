@@ -1,7 +1,5 @@
 const { celebrate, Joi } = require('celebrate');
 
-const linkRegExp = /(http:\/\/|https:\/\/)(www)*[a-z0-9\S]*/;
-
 module.exports.userValidation = celebrate({
   body: Joi.object().keys({
     email: Joi.string().required().email(),
@@ -24,23 +22,29 @@ module.exports.loginValidation = celebrate({
   }),
 });
 
-module.exports.movieIdValidation = celebrate({
+module.exports.deleteMovieValidator = celebrate({
   params: Joi.object().keys({
-    id: Joi.string().alphanum().length(24).hex(),
+    id: Joi.string().hex().min(24).max(24),
   }),
 });
 
-module.exports.movieValidation = celebrate({
+module.exports.addMovieValidator = celebrate({
   body: Joi.object().keys({
-    country: Joi.string().required(),
-    director: Joi.string().required(),
+    country: Joi.string().min(2).max(30).required(),
+    director: Joi.string().min(2).max(30).required(),
     duration: Joi.number().required(),
-    year: Joi.string().required(),
+    year: Joi.number().min(1900).max(2025).required(),
     description: Joi.string().required(),
-    image: Joi.string().required().pattern(linkRegExp),
-    trailerLink: Joi.string().required().pattern(linkRegExp),
-    thumbnail: Joi.string().required().pattern(linkRegExp),
-    movieId: Joi.number().required(),
+    image: Joi.string()
+      .pattern(/^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w.-]+)+[\w\-._~:/?#[\]@!$&'()*+,;=.]+$/)
+      .required(),
+    trailerLink: Joi.string()
+      .pattern(/^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w.-]+)+[\w\-._~:/?#[\]@!$&'()*+,;=.]+$/)
+      .required(),
+    thumbnail: Joi.string()
+      .pattern(/^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w.-]+)+[\w\-._~:/?#[\]@!$&'()*+,;=.]+$/)
+      .required(),
+    movieId: Joi.string().required(),
     nameRU: Joi.string().required(),
     nameEN: Joi.string().required(),
   }),

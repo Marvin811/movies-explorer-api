@@ -5,11 +5,13 @@ const errorMessages = {
   DuplicateEmail: 'Ошибка: Пользователь с такой почтой уже зарегистрирован',
   BadRequestUser: 'Ошибка: Переданы некорректные данные',
   NotFoundUser: 'Ошибка: Пользователь не найден',
-  UnauthorizedError: 'Ошибка авторизации',
+  UnauthorizedError: 'Неправильная почта или пароль',
   BadRequestError: 'Ошибка: Переданы некорректные данные при добавлении фильма',
   ForbiddenError: 'Ошибка: У вас нет прав на удаление данного фильма',
   NotFoundPage: 'Ресурс не найден',
   AuthorizationError: 'Необходимо авторизоваться',
+  NotFoundError: 'Фильм не найден',
+  SuccessDelete: 'Фильм успешно удален',
 };
 
 module.exports = errorMessages;
