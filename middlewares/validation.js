@@ -1,4 +1,12 @@
 const { celebrate, Joi } = require('celebrate');
+const validator = require('validator');
+
+const validationUrl = (value, helpers) => {
+  if (validator.isURL(value)) {
+    return value;
+  }
+  return helpers.message('Невалидный URL!');
+};
 
 module.exports.userValidation = celebrate({
   body: Joi.object().keys({
@@ -35,16 +43,10 @@ module.exports.addMovieValidator = celebrate({
     duration: Joi.number().required(),
     year: Joi.number().min(1900).max(2025).required(),
     description: Joi.string().required(),
-    image: Joi.string()
-      .pattern(/^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w.-]+)+[\w\-._~:/?#[\]@!$&'()*+,;=.]+$/)
-      .required(),
-    trailerLink: Joi.string()
-      .pattern(/^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w.-]+)+[\w\-._~:/?#[\]@!$&'()*+,;=.]+$/)
-      .required(),
-    thumbnail: Joi.string()
-      .pattern(/^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w.-]+)+[\w\-._~:/?#[\]@!$&'()*+,;=.]+$/)
-      .required(),
-    movieId: Joi.string().required(),
+    image: Joi.string().pattern(validationUrl).required(),
+    trailerLink: Joi.string().pattern(validationUrl).required(),
+    thumbnail: Joi.string().pattern(validationUrl).required(),
+    movieId: Joi.number().required(),
     nameRU: Joi.string().required(),
     nameEN: Joi.string().required(),
   }),

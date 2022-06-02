@@ -12,6 +12,12 @@ const errorMessages = {
   AuthorizationError: 'Необходимо авторизоваться',
   NotFoundError: 'Фильм не найден',
   SuccessDelete: 'Фильм успешно удален',
+  EmailIsRequired: 'Поле "Email" обязательно для заполнения',
+  PassowordIsRequired: 'Поле "Пароль" обязательно для заполнения',
+  NameMIsRequired: 'Поле "Имя" обязательно для заполнения',
+  NameMinLength: 'Имя не может быть короче 2-х символов',
+  NameMaxLength: 'Имя не может быть длинее 30-ти символов',
+  PasswordMinLenght: 'Пароль не может быть короче 8 символов',
 };
 
 module.exports = errorMessages;

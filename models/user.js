@@ -6,7 +6,7 @@ const errorMessages = require('../errors/errorMessages');
 const userSchema = new mongoose.Schema({
   email: {
     type: String,
-    required: [true, 'email обязательно должен быть указан'],
+    required: [true, errorMessages.EmailIsRequired],
     unique: true,
     validate: {
       validator: (v) => isEmail(v),
@@ -15,15 +15,15 @@ const userSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: [true, 'пароль обязательно должен быть указан'],
+    required: [true, errorMessages.PasswordIsRequired],
     select: false,
-    minlength: [8, 'пароль не может быть короче четырех символов'],
+    minlength: [8, errorMessages.PasswordMinLength],
   },
   name: {
     type: String,
-    minlength: [2, 'имя пользователя не может быть короче двух символов'],
-    maxlength: [30, 'имя пользователя не может быть длиннее 30 символов'],
-    required: [true, 'имя обязательно должно быть указанно'],
+    minlength: [2, errorMessages.NameMinLength],
+    maxlength: [30, errorMessages.NameMaxLength],
+    required: [true, errorMessages.NameMIsRequired],
   },
 });
 
