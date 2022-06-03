@@ -17,7 +17,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, errorMessages.PasswordIsRequired],
     select: false,
-    minlength: [8, errorMessages.PasswordMinLength],
+    minlength: [8, errorMessages.PasswordMinLenght],
   },
   name: {
     type: String,
