@@ -19,22 +19,23 @@ mongoose.connect(NODE_ENV === 'production' ? dbSrc : config.mongodb, {
   useNewUrlParser: true,
 });
 
-app.use(cors({
+const options = {
   origin: [
-    'localhost:3000',
     'http://localhost:3000',
     'https://api.movies.mav1.nomoredomains.xyz',
     'http://api.movies.mav1.nomoredomains.xyz',
   ],
-  methods: 'GET, POST, PATCH, DELETE',
-  allowedHeaders: 'Content-Type, Authorization, Origin, Accept',
-  credentials: true,
+  methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
+  preflightContinue: false,
   optionsSuccessStatus: 200,
-}));
+  allowedHeaders: ['Content-Type', 'origin', 'Authorization', 'Accept'],
+  credentials: true,
+};
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+app.use('*', cors(options));
 app.use(requestLogger);
 app.use(limiter);
 app.use(router);
