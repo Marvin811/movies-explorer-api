@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
+const cors = require('cors');
 const bodyParser = require('body-parser');
 const { errors } = require('celebrate');
 const { handleError } = require('./errors/handleError');
@@ -8,13 +9,6 @@ const router = require('./routes/index');
 const limiter = require('./utils/limit');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const config = require('./utils/config');
-
-const allowedCors = [
-  'localhost:3000',
-  'http://localhost:3000',
-  'https://api.movies.mav1.nomoredomains.xyz',
-  'http://api.movies.mav1.nomoredomains.xyz',
-];
 
 // Слушаем 3000 порт
 const { dbSrc, NODE_ENV } = process.env;
@@ -24,6 +18,7 @@ const app = express();
 mongoose.connect(NODE_ENV === 'production' ? dbSrc : config.mongodb, {
   useNewUrlParser: true,
 });
+
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
