@@ -25,6 +25,9 @@ mongoose.connect(NODE_ENV === 'production' ? dbSrc : config.mongodb, {
   useNewUrlParser: true,
 });
 
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
 app.use((req, res, next) => {
   const { origin } = req.headers;
   const { method } = req;
@@ -39,12 +42,8 @@ app.use((req, res, next) => {
     res.header('Access-Control-Allow-Headers', requestHeaders);
     return res.end();
   }
-  next();
-  return null;
+  return next();
 });
-
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(requestLogger);
 app.use(limiter);
