@@ -1,7 +1,6 @@
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
-const cors = require('cors');
 const bodyParser = require('body-parser');
 const { errors } = require('celebrate');
 const { handleError } = require('./errors/handleError');
@@ -19,6 +18,12 @@ mongoose.connect(NODE_ENV === 'production' ? dbSrc : config.mongodb, {
   useNewUrlParser: true,
 });
 
+const allowedCors = [
+  'localhost:3000',
+  'http://localhost:3000',
+  'https://api.movies.mav1.nomoredomains.xyz',
+  'http://api.movies.mav1.nomoredomains.xyz',
+];
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
