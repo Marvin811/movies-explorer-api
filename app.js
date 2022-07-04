@@ -21,8 +21,8 @@ mongoose.connect(NODE_ENV === 'production' ? dbSrc : config.mongodb, {
 const allowedCors = [
   'localhost:3000',
   'http://localhost:3000',
-  'https://api.movies.mav1.nomoredomains.xyz',
-  'http://api.movies.mav1.nomoredomains.xyz',
+  'https://movies-explorer.mavi.nomoreparties.sbs',
+  'http://movies-explorer.mavi.nomoreparties.sbs',
 ];
 
 app.use(bodyParser.json());
